@@ -16,5 +16,11 @@ public enum AlertTarget implements AlertStrategy {
 			String recepient = "a.b@c.com";
 			breachType.sendMail(recepient);
 		}
+	},
+	TO_CONSOLE {
+		@Override
+		public void sendAlert(BreachType breachType) {
+			System.out.println(breachType.name());
+		}
 	};
 };
