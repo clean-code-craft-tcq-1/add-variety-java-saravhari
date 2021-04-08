@@ -20,7 +20,7 @@ public enum AlertTarget implements AlertStrategy {
 	TO_CONSOLE {
 		@Override
 		public void sendAlert(BreachType breachType) {
-			System.out.println(breachType.name());
+			System.out.println("Console Output : " + breachType.toString());
 		}
 	};
 };
