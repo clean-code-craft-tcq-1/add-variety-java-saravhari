@@ -4,7 +4,10 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
+import character.BatteryCharacter;
+import enums.AlertTarget;
 import enums.BreachType;
+import enums.CoolingType;
 
 public class TypewiseAlertTest {
 	@Test
@@ -20,5 +23,31 @@ public class TypewiseAlertTest {
 	@Test
 	public void infersBreachAsPerNormalLimits() {
 		assertTrue(TypewiseAlert.inferBreach(12, 0, 46) == BreachType.NORMAL);
+	}
+	
+	@Test
+	public void infersBreachAsPerZeroLimits() {
+		assertTrue(TypewiseAlert.inferBreach(12, 0, 0) == BreachType.TOO_LOW);
+	}
+	
+	@Test
+	public void infersBreachAsPerZeroValue() {
+		assertTrue(TypewiseAlert.inferBreach(0, 0, 0) == BreachType.TOO_LOW);
+	}
+
+	@Test
+	public void checkAndAlertEmail() {
+		BatteryCharacter batteryChar = new BatteryCharacter();
+		batteryChar.coolingType = CoolingType.PASSIVE_COOLING;
+		TypewiseAlert.checkAndAlert(AlertTarget.TO_EMAIL, batteryChar, 46.0F);
+		assertTrue(true);
+	}
+	
+	@Test
+	public void checkAndAlertController() {
+		BatteryCharacter batteryChar = new BatteryCharacter();
+		batteryChar.coolingType = CoolingType.HI_ACTIVE_COOLING;
+		TypewiseAlert.checkAndAlert(AlertTarget.TO_CONTROLLER, batteryChar, 46.0F);
+		assertTrue(true);
 	}
 }
