@@ -42,12 +42,4 @@ public class TypewiseAlertTest {
 		TypewiseAlert.checkAndAlert(AlertTarget.TO_EMAIL, batteryChar, 46.0F);
 		assertTrue(true);
 	}
-	
-	@Test
-	public void checkAndAlertController() {
-		BatteryCharacter batteryChar = new BatteryCharacter();
-		batteryChar.coolingType = CoolingType.HI_ACTIVE_COOLING;
-		TypewiseAlert.checkAndAlert(AlertTarget.TO_CONTROLLER, batteryChar, 46.0F);
-		assertTrue(true);
-	}
 }
