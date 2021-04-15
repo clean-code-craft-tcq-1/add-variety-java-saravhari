@@ -1,14 +1,17 @@
 package alert;
 
+import enums.BreachType;
 import strategy.AlertStrategy;
 import strategy.BreachTypeStrategy;
 
 public class AlertToController implements AlertStrategy {
 
 	@Override
-	public void sendAlert(BreachTypeStrategy breachTypeStrategy) {
+	public BreachType sendAlert(BreachTypeStrategy breachTypeStrategy) {
 		int header = 0xfeed;
-		System.out.printf("%i : %i\n", header, breachTypeStrategy.getBreachType());
+		System.out.printf("%d : %s\n", header, breachTypeStrategy.getBreachType().toString());
+		 
+		return breachTypeStrategy.getBreachType();
 	}
 
 }

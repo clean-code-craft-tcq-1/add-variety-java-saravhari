@@ -5,7 +5,7 @@ import constants.CoolingConstants;
 import strategy.BreachTypeStrategy;
 import strategy.CoolingStrategy;
 
-public class CoolingTypeHMedActive implements CoolingStrategy {
+public class CoolingTypeMedActive implements CoolingStrategy {
 
 	@Override
 	public BreachTypeStrategy classifyTemperatureBreach(double value) {

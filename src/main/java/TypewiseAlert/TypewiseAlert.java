@@ -34,9 +34,11 @@ public class TypewiseAlert {
 		return BreachMap.get(BreachType.NORMAL);
 	}
 
-	public static void checkAndAlert(AlertStrategy alertStrategy, BatteryCharacter batteryChar, double temperatureInC) {
+	public BreachType checkAndAlert(AlertStrategy alertStrategy, BatteryCharacter batteryChar, double temperatureInC) {
 
 		BreachTypeStrategy breachTypeStrategy = batteryChar.coolingStrategy.classifyTemperatureBreach(temperatureInC);
-		alertStrategy.sendAlert(breachTypeStrategy);
+
+		return alertStrategy.sendAlert(breachTypeStrategy);
 	}
+
 }
