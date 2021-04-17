@@ -1,8 +1,8 @@
 package character;
 
-import strategy.CoolingStrategy;
+import enums.CoolingType;
 
 public class BatteryCharacter {
-	public CoolingStrategy coolingStrategy;
+	public CoolingType coolingType;
 	public String brand;
 }
