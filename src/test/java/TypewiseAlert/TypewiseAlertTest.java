@@ -55,14 +55,7 @@ public class TypewiseAlertTest {
 		BatteryCharacter batteryChar = new BatteryCharacter();
 		AlertStrategy alertStrategy = Mockito.mock(AlertToEmail.class);
 
-		batteryChar.coolingType = CoolingType.HI_ACTIVE_COOLING;
-		TypewiseAlert.checkAndAlert(alertStrategy, batteryChar, 46.0F);
-
-		batteryChar.coolingType = CoolingType.MED_ACTIVE_COOLING;
-		TypewiseAlert.checkAndAlert(alertStrategy, batteryChar, 46.0F);
-
-		batteryChar.coolingType = CoolingType.PASSIVE_COOLING;
-		TypewiseAlert.checkAndAlert(alertStrategy, batteryChar, 46.0F);
+		MockedCoolingStateCheckAndAlert(alertStrategy, batteryChar);
 	}
 
 	@Test
@@ -70,14 +63,7 @@ public class TypewiseAlertTest {
 		BatteryCharacter batteryChar = new BatteryCharacter();
 		AlertStrategy alertStrategy = Mockito.mock(AlertToController.class);
 
-		batteryChar.coolingType = CoolingType.HI_ACTIVE_COOLING;
-		TypewiseAlert.checkAndAlert(alertStrategy, batteryChar, 46.0F);
-
-		batteryChar.coolingType = CoolingType.MED_ACTIVE_COOLING;
-		TypewiseAlert.checkAndAlert(alertStrategy, batteryChar, 46.0F);
-
-		batteryChar.coolingType = CoolingType.PASSIVE_COOLING;
-		TypewiseAlert.checkAndAlert(alertStrategy, batteryChar, 46.0F);
+		MockedCoolingStateCheckAndAlert(alertStrategy, batteryChar);
 	}
 
 	@Test
@@ -85,6 +71,10 @@ public class TypewiseAlertTest {
 		BatteryCharacter batteryChar = new BatteryCharacter();
 		AlertStrategy alertStrategy = Mockito.mock(AlertToConsole.class);
 
+		MockedCoolingStateCheckAndAlert(alertStrategy, batteryChar);
+	}
+
+	private void MockedCoolingStateCheckAndAlert(AlertStrategy alertStrategy, BatteryCharacter batteryChar) {
 		batteryChar.coolingType = CoolingType.HI_ACTIVE_COOLING;
 		TypewiseAlert.checkAndAlert(alertStrategy, batteryChar, 46.0F);
 
