@@ -1,87 +1,76 @@
 package TypewiseAlert;
 
-public class TypewiseAlert 
-{
-    public enum BreachType {
-      NORMAL,
-      TOO_LOW,
-      TOO_HIGH
-    };
-    public static BreachType inferBreach(double value, double lowerLimit, double upperLimit) {
-      if(value < lowerLimit) {
-        return BreachType.TOO_LOW;
-      }
-      if(value > upperLimit) {
-        return BreachType.TOO_HIGH;
-      }
-      return BreachType.NORMAL;
-    }
-    public enum CoolingType {
-      PASSIVE_COOLING,
-      HI_ACTIVE_COOLING,
-      MED_ACTIVE_COOLING
-    };
-    public static BreachType classifyTemperatureBreach(
-        CoolingType coolingType, double temperatureInC) {
-      int lowerLimit = 0;
-      int upperLimit = 0;
-      switch(coolingType) {
-        case PASSIVE_COOLING:
-          lowerLimit = 0;
-          upperLimit = 35;
-          break;
-        case HI_ACTIVE_COOLING:
-          lowerLimit = 0;
-          upperLimit = 45;
-          break;
-        case MED_ACTIVE_COOLING:
-          lowerLimit = 0;
-          upperLimit = 40;
-          break;
-      }
-      return inferBreach(temperatureInC, lowerLimit, upperLimit);
-    }
-    public enum AlertTarget{
-      TO_CONTROLLER,
-      TO_EMAIL
-    };
-    public class BatteryCharacter {
-      public CoolingType coolingType;
-      public String brand;
-    }
-    public static void checkAndAlert(
-        AlertTarget alertTarget, BatteryCharacter batteryChar, double temperatureInC) {
+import java.util.HashMap;
+import java.util.Map;
 
-      BreachType breachType = classifyTemperatureBreach(
-        batteryChar.coolingType, temperatureInC
-      );
+import alert.AlertToConsole;
+import alert.AlertToController;
+import alert.AlertToEmail;
+import breach.BreachTypeNormal;
+import breach.BreachTypeTooHigh;
+import breach.BreachTypeTooLow;
+import character.BatteryCharacter;
+import cooling.CoolingTypeHiActive;
+import cooling.CoolingTypeMedActive;
+import cooling.CoolingTypePassive;
+import enums.AlertTarget;
+import enums.BreachType;
+import enums.CoolingType;
+import strategy.AlertStrategy;
+import strategy.BreachTypeStrategy;
+import strategy.CoolingStrategy;
 
-      switch(alertTarget) {
-        case TO_CONTROLLER:
-          sendToController(breachType);
-          break;
-        case TO_EMAIL:
-          sendToEmail(breachType);
-          break;
-      }
-    }
-    public static void sendToController(BreachType breachType) {
-      int header = 0xfeed;
-      System.out.printf("%i : %i\n", header, breachType);
-    }
-    public static void sendToEmail(BreachType breachType) {
-      String recepient = "a.b@c.com";
-      switch(breachType) {
-        case TOO_LOW:
-          System.out.printf("To: %s\n", recepient);
-          System.out.println("Hi, the temperature is too low\n");
-          break;
-        case TOO_HIGH:
-          System.out.printf("To: %s\n", recepient);
-          System.out.println("Hi, the temperature is too high\n");
-          break;
-        case NORMAL:
-          break;
-      }
-    }
+public class TypewiseAlert {
+
+	public static Map<BreachType, BreachTypeStrategy> BreachMap = new HashMap<BreachType, BreachTypeStrategy>() {
+
+		private static final long serialVersionUID = 1L;
+
+		{
+			put(BreachType.TOO_LOW, new BreachTypeTooLow());
+			put(BreachType.NORMAL, new BreachTypeNormal());
+			put(BreachType.TOO_HIGH, new BreachTypeTooHigh());
+		}
+	};
+
+	public static Map<CoolingType, CoolingStrategy> cooligMap = new HashMap<CoolingType, CoolingStrategy>() {
+
+		private static final long serialVersionUID = 1L;
+
+		{
+			put(CoolingType.HI_ACTIVE_COOLING, new CoolingTypeHiActive());
+			put(CoolingType.MED_ACTIVE_COOLING, new CoolingTypeMedActive());
+			put(CoolingType.PASSIVE_COOLING, new CoolingTypePassive());
+		}
+	};
+
+	public static Map<AlertTarget, AlertStrategy> alertMap = new HashMap<AlertTarget, AlertStrategy>() {
+
+		private static final long serialVersionUID = 1L;
+
+		{
+			put(AlertTarget.TO_EMAIL, new AlertToEmail());
+			put(AlertTarget.TO_CONTROLLER, new AlertToController());
+			put(AlertTarget.TO_CONSOLE, new AlertToConsole());
+		}
+	};
+
+	public static BreachTypeStrategy inferBreach(double value, double lowerLimit, double upperLimit) {
+		if (value < lowerLimit) {
+			return BreachMap.get(BreachType.TOO_LOW);
+		}
+		if (value > upperLimit) {
+			return BreachMap.get(BreachType.TOO_HIGH);
+		}
+		return BreachMap.get(BreachType.NORMAL);
+	}
+
+	public static void checkAndAlert(AlertStrategy alertStrategy, BatteryCharacter batteryChar, double temperatureInC) {
+
+		BreachTypeStrategy breachTypeStrategy = cooligMap.get(batteryChar.coolingType)
+				.classifyTemperatureBreach(temperatureInC);
+
+		alertStrategy.sendAlert(breachTypeStrategy);
+	}
+
 }
